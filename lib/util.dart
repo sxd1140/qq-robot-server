@@ -1,5 +1,7 @@
 import '/Constant.dart';
 import '/model/Message.dart';
+import 'manager/QQManager.dart';
+import 'model/Sender.dart';
 
 List parseMsgChain(List list) {
   List ret = [];
@@ -33,5 +35,18 @@ buildMsgItem(eMsgItem type, content) {
   }
   if (type == eMsgItem.image) {
     return {'type': eMsgItem.image.command, ...content};
+  }
+}
+
+replyMsg(Message recvMsg, messageChain) {
+  if (!(messageChain is List)) {
+    messageChain = [messageChain];
+  }
+  if (recvMsg is RecvGroupMessage) {
+    final groupID = (recvMsg.sender as GroupMsgSender).group['id'];
+    QQManager().sendGroupMsg(target: groupID, messageChain: messageChain);
+  } else if (recvMsg is RecvFriendMessage) {
+    final qq = (recvMsg.sender as FriendMsgSender).id;
+    QQManager().sendFriendMsg(qq: qq, messageChain: messageChain);
   }
 }

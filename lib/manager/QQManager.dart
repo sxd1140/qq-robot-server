@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:qq_robot_server/plugin/steam.dart';
+import 'package:qq_robot_server/plugin/switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '/Constant.dart';
@@ -21,7 +22,7 @@ class QQManager {
 
   Stream get receiveStream => _robotConnection.stream;
 
-  final List _pluginList = [pluginSteam];
+  final List _pluginList = [pluginSteam, pluginSwitch];
 
   ///发送出去消息缓存在这里 等待发送成功验证
   final Map _mapPendingMsg = {};

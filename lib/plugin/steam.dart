@@ -2,9 +2,7 @@ import 'package:html/parser.dart';
 import 'package:puppeteer/puppeteer.dart';
 
 import '/Constant.dart';
-import '/manager/QQManager.dart';
 import '/model/Message.dart';
-import '/model/Sender.dart';
 import '/slib.dart';
 import '/util.dart';
 
@@ -41,14 +39,14 @@ pluginSteam(Map msg) async {
     _returnNotFound(recvMsg);
     return;
   } else {
-    _reply(recvMsg, buildPlainMsgItem('等老子给你找下, 莫急.'));
+    replyMsg(recvMsg, buildPlainMsgItem('等老子给你找下, 莫急.'));
     final appID = domFirst.attributes['data-ds-appid'];
     final appDetail = (await get('https://store.steampowered.com/api/appdetails?appids=$appID&l=schinese&cc=cn'))[appID]['data'];
     final name = appDetail['name'];
     final shortDesc = appDetail['short_description'];
     final image = appDetail['header_image'];
     final isFree = appDetail['package_groups'].length == 0; //appDetail['is_free'];
-    var text = '$name\n$shortDesc\n';
+    var text = '\n$name\n$shortDesc\n';
 
     final price = [];
     if (isFree) {
@@ -92,7 +90,7 @@ pluginSteam(Map msg) async {
       browser.close();
     }
 
-    _reply(recvMsg, [
+    replyMsg(recvMsg, [
       buildImageMsgItem(url: image),
       buildPlainMsgItem(text),
     ]);
@@ -100,18 +98,5 @@ pluginSteam(Map msg) async {
 }
 
 _returnNotFound(Message recvMsg) {
-  _reply(recvMsg, buildPlainMsgItem('找不到这个屌游戏啊'));
-}
-
-_reply(Message recvMsg, messageChain) {
-  if (!(messageChain is List)) {
-    messageChain = [messageChain];
-  }
-  if (recvMsg is RecvGroupMessage) {
-    final groupID = (recvMsg.sender as GroupMsgSender).group['id'];
-    QQManager().sendGroupMsg(target: groupID, messageChain: messageChain);
-  } else if (recvMsg is RecvFriendMessage) {
-    final qq = (recvMsg.sender as FriendMsgSender).id;
-    QQManager().sendFriendMsg(qq: qq, messageChain: messageChain);
-  }
+  replyMsg(recvMsg, buildPlainMsgItem('找不到这个屌游戏啊'));
 }
