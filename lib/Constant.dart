@@ -1,5 +1,4 @@
-const serverDomain = String.fromEnvironment("serverDomain", defaultValue: 'ws://localhost:8080');
-//const serverDomain = 'https://api.vtongo.com';
+String serverDomain = 'ws://localhost:8080';
 
 const robotQQ = int.fromEnvironment("robotQQ", defaultValue: 33057788);
 
