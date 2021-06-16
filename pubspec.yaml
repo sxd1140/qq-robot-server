@@ -10,6 +10,10 @@ dependencies:
   web_socket_channel: 2.1.0
   html: 0.15.0
   puppeteer: 2.2.0
+  shelf: 1.1.4
+  shelf_router: 1.0.0
+  shelf_static: 1.0.0
+  sembast: 3.1.0+2
 
 dev_dependencies:
   test: ^1.16.0
