@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:qq_robot_server/plugin/envy.dart';
 import 'package:qq_robot_server/plugin/plugin.dart';
 import 'package:qq_robot_server/plugin/steam.dart';
 import 'package:qq_robot_server/plugin/switch.dart';
@@ -28,6 +29,7 @@ class QQManager {
   final List<Plugin> _pluginList = [
     PluginSteam(),
     PluginSwitch(),
+    PluginEnvy(),
   ];
 
   ///发送出去消息缓存在这里 等待发送成功验证
