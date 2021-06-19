@@ -6,7 +6,10 @@ void main(List<String> arguments) {
   final parser = ArgParser()..addOption('serverDomain');
 
   ArgResults argResults = parser.parse(arguments);
-  serverDomain = argResults['serverDomain'];
+  final url = argResults['serverDomain'];
+  if (url != null) {
+    serverDomain = url;
+  }
 
   entry.main(arguments);
 }
