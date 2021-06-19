@@ -5,6 +5,7 @@ import 'package:qq_robot_server/plugin/envy.dart';
 import 'package:qq_robot_server/plugin/plugin.dart';
 import 'package:qq_robot_server/plugin/steam.dart';
 import 'package:qq_robot_server/plugin/switch.dart';
+import 'package:qq_robot_server/slib.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '/Constant.dart';
@@ -39,9 +40,11 @@ class QQManager {
     if (_inited) return;
     _inited = true;
 
-    _robotConnection = WebSocketChannel.connect(
-      Uri.parse('$serverDomain/all'),
-    );
+    _robotConnection = WebSocketChannel.connect(Uri.parse('$serverDomain/all'));
+    setInterval((t) {
+      _robotConnection.sink.add('{}');
+      // print('ping');
+    }, 30 * 1000);
 
     await for (var msg in receiveStream) {
       final receive = jsonDecode(msg);
@@ -51,10 +54,12 @@ class QQManager {
           _connected = true;
           for (var plugin in _pluginList) {
             plugin.onInit();
-            continue;
           }
+          continue;
         }
       }
+      //{code:, msg:}
+      if (receive['syncId'] == null) continue;
       //验证消息发送成功
       final pendingMsg = _mapPendingMsg[receive['syncId']];
       if (pendingMsg != null) {
@@ -71,6 +76,7 @@ class QQManager {
         }
       }
     }
+    print('end');
   }
 
   Future send({required String command, Map? content, Completer? completer}) {
