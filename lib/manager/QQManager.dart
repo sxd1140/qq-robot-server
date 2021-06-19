@@ -41,7 +41,7 @@ class QQManager {
     if (_inited) return;
     _inited = true;
 
-    _robotConnection = WebSocketChannel.connect(Uri.parse('$serverDomain/all'));
+    _robotConnection = WebSocketChannel.connect(Uri.parse('$serverDomain/all?verifyKey=7SHbJwLH'));
     setInterval((t) {
       _robotConnection.sink.add('{}');
       // print('ping');
