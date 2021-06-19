@@ -1,7 +1,7 @@
 import 'package:qq_robot_server/plugin/plugin.dart';
 
 import '/Constant.dart';
-import '/model/Message.dart';
+import '/model/message.dart';
 import '/slib.dart';
 import '/util.dart';
 

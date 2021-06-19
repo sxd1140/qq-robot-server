@@ -1,7 +1,7 @@
 import '/Constant.dart';
-import '/model/Message.dart';
+import '/model/message.dart';
 import 'manager/QQManager.dart';
-import 'model/Sender.dart';
+import 'model/sender.dart';
 
 List parseMsgChain(List list) {
   List ret = [];

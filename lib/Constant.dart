@@ -1,6 +1,7 @@
 String serverDomain = 'ws://localhost:8080';
 
 const robotQQ = int.fromEnvironment("robotQQ", defaultValue: 33057788);
+const installBGroupQQ = 342854392;
 
 extension MsgObject on Map {
   bool get isFriendMessage {

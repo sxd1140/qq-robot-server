@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:qq_robot_server/model/model.dart';
 import 'package:qq_robot_server/plugin/envy.dart';
 import 'package:qq_robot_server/plugin/plugin.dart';
 import 'package:qq_robot_server/plugin/steam.dart';
@@ -103,5 +104,10 @@ class QQManager {
 
   fetchGroupMemberList({required int target}) async {
     return await send(command: 'memberList', content: {'target': target});
+  }
+
+  Future<MemberProfile> fetchGroupMemberProfile({required int groupID, required int qq}) async {
+    final result = await send(command: 'memberProfile', content: {'target': groupID, 'memberId': qq});
+    return MemberProfile.fromJson(result);
   }
 }
