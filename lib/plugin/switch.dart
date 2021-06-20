@@ -43,7 +43,7 @@ class PluginSwitch extends Plugin {
 
     final game = result['data']['games'][0];
     final name = game['titleZh'];
-    final recommendLabel = game['recommendLabel'];
+    final recommendLabel = game['recommendLabel'] ?? '';
     final image = game['icon'];
     final price = game['price'];
     final country = game['country'];
