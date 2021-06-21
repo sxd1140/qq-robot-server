@@ -7,6 +7,7 @@ import 'package:qq_robot_server/plugin/plugin.dart';
 import 'package:qq_robot_server/plugin/steam.dart';
 import 'package:qq_robot_server/plugin/switch.dart';
 import 'package:qq_robot_server/slib.dart';
+import 'package:qq_robot_server/util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '/Constant.dart';
@@ -56,6 +57,7 @@ class QQManager {
           for (var plugin in _pluginList) {
             plugin.onInit();
           }
+          sendFriendMsg(qq: masterQQ, message: '机器人$robotQQ上线成功');
           continue;
         }
       }
@@ -94,11 +96,26 @@ class QQManager {
     return completer.future;
   }
 
-  sendGroupMsg({required int target, required List messageChain}) async {
+  sendGroupMsg({required int target, List? messageChain, String? message}) async {
+    if (messageChain == null) {
+      if (message == null) {
+        print('sendGroupMsg no content');
+        return;
+      }
+      messageChain = [buildPlainMsgItem(message)];
+    }
+
     return await send(command: 'sendGroupMessage', content: {'target': target, 'messageChain': messageChain});
   }
 
-  sendFriendMsg({required int qq, required List messageChain}) async {
+  sendFriendMsg({required int qq, List? messageChain, String? message}) async {
+    if (messageChain == null) {
+      if (message == null) {
+        print('sendFriendMsg no content');
+        return;
+      }
+      messageChain = [buildPlainMsgItem(message)];
+    }
     return await send(command: 'sendFriendMessage', content: {'qq': qq, 'messageChain': messageChain});
   }
 
