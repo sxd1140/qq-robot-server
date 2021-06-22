@@ -15,6 +15,19 @@ final isLinux = Platform.isLinux;
 final isMacOS = Platform.isMacOS;
 
 get(String url, {Map<String, dynamic>? queryParameters, retryCount = 3, headers, parseJSON = true, List<Interceptor>? interceptors, timestamp = true}) async {
+  return http('GET', url, queryParameters: queryParameters, retryCount: retryCount, headers: headers, parseJSON: parseJSON, interceptors: interceptors, timestamp: timestamp);
+}
+
+post(String url, {Map<String, dynamic>? queryParameters, body, retryCount = 3, headers, parseJSON = true, List<Interceptor>? interceptors, timestamp = true}) async {
+  return http('POST', url, queryParameters: queryParameters, body: body, retryCount: retryCount, headers: headers, parseJSON: parseJSON, interceptors: interceptors, timestamp: timestamp);
+}
+
+put(String url, {Map<String, dynamic>? queryParameters, body, retryCount = 3, headers, parseJSON = true, List<Interceptor>? interceptors, timestamp = true}) async {
+  return http('PUT', url, queryParameters: queryParameters, body: body, retryCount: retryCount, headers: headers, parseJSON: parseJSON, interceptors: interceptors, timestamp: timestamp);
+}
+
+http(String method, String url, {Map<String, dynamic>? queryParameters, body, retryCount = 3, headers, parseJSON = true, List<Interceptor>? interceptors, timestamp = true}) async {
+  method = method.toUpperCase();
   var options;
   if (headers != null) {
     options = Options(headers: headers);
@@ -29,50 +42,13 @@ get(String url, {Map<String, dynamic>? queryParameters, retryCount = 3, headers,
     try {
       final dio = Dio();
       if (interceptors != null) dio.interceptors.addAll(interceptors);
-      response = await dio.get(NetUtil.normalizeURL(url), queryParameters: NetUtil.normalizeQueryParams(queryParameters!), options: options);
-    } catch (e) {
-      if (retryCount-- > 0) {
-        print(e.toString());
-        await sleep(1000);
-        send();
-      } else {
-        completer.complete({"code": -1, "msg": "网络异常"});
+      if (method == 'GET') {
+        response = await dio.get(NetUtil.normalizeURL(url), queryParameters: NetUtil.normalizeQueryParams(queryParameters!), options: options);
+      } else if (method == 'POST') {
+        response = await dio.post(NetUtil.normalizeURL(url), data: body, queryParameters: NetUtil.normalizeQueryParams(queryParameters!), options: options);
+      } else if (method == 'PUT') {
+        response = await dio.put(NetUtil.normalizeURL(url), data: body, queryParameters: NetUtil.normalizeQueryParams(queryParameters!), options: options);
       }
-      return;
-    }
-
-    //parse json
-    if (parseJSON) {
-      try {
-        response = json.decode(response.toString());
-      } catch (e) {
-        print(e);
-        response = {"code": -2, "msg": "json解析错误"};
-      }
-    }
-
-    completer.complete(response);
-  }
-
-  send();
-  return completer.future;
-}
-
-post(String url, {queryParameters, body, retryCount = 3, headers, parseJSON = true, List<Interceptor>? interceptors}) async {
-  var options;
-  if (headers != null) {
-    options = Options(headers: headers);
-  }
-
-  dynamic response;
-  final completer = Completer();
-
-  send() async {
-    queryParameters['v'] = Date.now();
-    try {
-      final dio = Dio();
-      if (interceptors != null) dio.interceptors.addAll(interceptors);
-      response = await dio.post(NetUtil.normalizeURL(url), data: body, queryParameters: NetUtil.normalizeQueryParams(queryParameters), options: options);
     } catch (e) {
       if (retryCount-- > 0) {
         await sleep(1000);

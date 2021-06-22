@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:qq_robot_server/Constant.dart';
+import 'package:qq_robot_server/manager/DataManager.dart';
 import 'package:qq_robot_server/manager/QQManager.dart';
 import 'package:qq_robot_server/model/message.dart';
 import 'package:qq_robot_server/model/sender.dart';
@@ -10,16 +8,10 @@ import 'package:qq_robot_server/util.dart';
 
 class PluginEnvy extends Plugin {
   String KEY_WORD = '羡慕';
-  var envyStore = {};
-  late File fileEnvy;
 
   @override
   onInit() {
     super.onInit();
-    fileEnvy = File('data/envy.json');
-    if (fileEnvy.existsSync()) {
-      envyStore = jsonDecode(fileEnvy.readAsStringSync());
-    }
   }
 
   @override
@@ -39,12 +31,14 @@ class PluginEnvy extends Plugin {
         if (ats[0].target == robotQQ) {
           String queryText = contents[0].text.trim();
           if (!queryText.startsWith(KEY_WORD)) return;
-          final member = envyStore[ats[1].target.toString()];
+
+          final envyList = await DataManager().fetchLeanStorage(classes: 'envy', query: {'qq': ats[1].target});
+          final envyStore = envyList[0];
           final queryMember = await QQManager().fetchGroupMemberProfile(groupID: installBGroupQQ, qq: ats[1].target);
-          if (member == null) {
+          if (envyList.length <= 0) {
             replyMsg(recvMsg, buildPlainMsgItem('${queryMember.nickname}从不羡慕他人'));
           } else {
-            replyMsg(recvMsg, buildPlainMsgItem('${queryMember.nickname}已经羡慕了${member['envyCount']}次'));
+            replyMsg(recvMsg, buildPlainMsgItem('${queryMember.nickname}已经羡慕了${envyStore['count']}次'));
           }
           return;
         }
@@ -56,10 +50,14 @@ class PluginEnvy extends Plugin {
       });
       if (!content.contains(KEY_WORD)) return;
 
-      final member = envyStore[recvMsg.sender.id.toString()] ?? {'envyCount': 0};
-      member['envyCount'] = member['envyCount'] + 1;
-      envyStore[recvMsg.sender.id.toString()] = member;
-      fileEnvy.writeAsStringSync(jsonEncode(envyStore));
+      final senderQQ = recvMsg.sender.id;
+      final envyList = await DataManager().fetchLeanStorage(classes: 'envy', query: {'qq': senderQQ});
+      if (envyList.length <= 0) {
+        DataManager().createLeanStorage(classes: 'envy', data: {'qq': recvMsg.sender.id, 'count': 1});
+      } else {
+        final envyStore = envyList[0];
+        DataManager().incrementLeanStorage(classes: 'envy', objectID: envyStore['objectId']);
+      }
     }
   }
 }
