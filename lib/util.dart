@@ -39,7 +39,9 @@ buildMsgItem(eMsgItem type, content) {
 }
 
 replyMsg(Message recvMsg, messageChain) {
-  if (!(messageChain is List)) {
+  if (messageChain is String) {
+    messageChain = [buildPlainMsgItem(messageChain)];
+  } else if (!(messageChain is List)) {
     messageChain = [messageChain];
   }
   if (recvMsg is RecvGroupMessage) {

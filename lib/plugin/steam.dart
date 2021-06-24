@@ -8,42 +8,36 @@ import '/slib.dart';
 import '/util.dart';
 
 class PluginSteam extends Plugin {
+  String KEY_WORD = 'steam';
+
   @override
   onRecvMsg(Map msg) async {
     super.onRecvMsg(msg);
     late final recvMsg;
     if (msg.isGroupMessage) {
       recvMsg = RecvGroupMessage.fromJson(msg);
-      //只关注@自己的群消息
-      var at = false;
-      for (var item in recvMsg.messageChain) {
-        if (item is MsgItemAt) {
-          if (item.target == robotQQ) {
-            at = true;
-            break;
-          }
-        }
-      }
-      if (!at) return;
     } else if (msg.isFriendMessage || msg.isTempMessage) {
       recvMsg = RecvFriendMessage.fromJson(msg);
-    } else
+    } else {
       return;
+    }
 
-    final item = recvMsg.messageChain.firstWhere((element) => element is MsgItemPlain);
-    String queryText = item.text.trim();
-    if (!queryText.startsWith('steam')) return;
-    queryText = queryText.replaceFirst('steam', '').trim();
+    String contents = recvMsg.allText;
+    if (contents.length <= 0) return;
+
+    if (!contents.startsWith('/$KEY_WORD')) return;
+
+    contents = contents.replaceFirst('/$KEY_WORD', '').trim();
 
     final url = 'https://store.steampowered.com/search';
-    final result = await get(url, queryParameters: {'term': queryText}, parseJSON: false);
+    final result = await get(url, queryParameters: {'term': contents}, parseJSON: false);
     final domHTML = parse(result.toString());
     final domFirst = domHTML.querySelector('div#search_resultsRows>a.search_result_row');
     if (domFirst == null) {
       _returnNotFound(recvMsg);
       return;
     } else {
-      replyMsg(recvMsg, buildPlainMsgItem('等老子给你找下, 莫急.'));
+      replyMsg(recvMsg, '等老子给你找下, 莫急.');
       final appID = domFirst.attributes['data-ds-appid'];
       final appDetail = (await get('https://store.steampowered.com/api/appdetails?appids=$appID&l=schinese&cc=cn'))[appID]['data'];
       final name = appDetail['name'];
@@ -103,5 +97,5 @@ class PluginSteam extends Plugin {
 }
 
 _returnNotFound(Message recvMsg) {
-  replyMsg(recvMsg, buildPlainMsgItem('找不到这个屌游戏啊'));
+  replyMsg(recvMsg, '找不到这个屌游戏啊');
 }

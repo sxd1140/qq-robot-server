@@ -6,19 +6,26 @@ class Message extends ModelFromServer {
   late List messageChain;
   late Sender sender;
 
-  Message.fromJson(Map json) : super.fromJson(json);
+  Message.fromJson(Map json) : super.fromJson(json) {
+    messageChain = parseMsgChain(data['messageChain']);
+  }
+
+  String get allText {
+    return messageChain.fold<String>('', (previousValue, element) {
+      if (!(element is MsgItemPlain)) return previousValue;
+      return previousValue + element.text;
+    }).trim();
+  }
 }
 
 class RecvGroupMessage extends Message {
   RecvGroupMessage.fromJson(Map json) : super.fromJson(json) {
-    messageChain = parseMsgChain(data['messageChain']);
     sender = GroupMsgSender.fromJson(data['sender']);
   }
 }
 
 class RecvFriendMessage extends Message {
   RecvFriendMessage.fromJson(Map json) : super.fromJson(json) {
-    messageChain = parseMsgChain(data['messageChain']);
     sender = FriendMsgSender.fromJson(data['sender']);
   }
 }

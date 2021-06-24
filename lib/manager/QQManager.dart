@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:qq_robot_server/model/model.dart';
-import 'package:qq_robot_server/plugin/envy.dart';
 import 'package:qq_robot_server/plugin/plugin.dart';
-import 'package:qq_robot_server/plugin/steam.dart';
-import 'package:qq_robot_server/plugin/switch.dart';
 import 'package:qq_robot_server/slib.dart';
 import 'package:qq_robot_server/util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -29,12 +26,6 @@ class QQManager {
 
   Stream get receiveStream => _robotConnection.stream;
 
-  final List<Plugin> _pluginList = [
-    PluginSteam(),
-    PluginSwitch(),
-    PluginEnvy(),
-  ];
-
   ///发送出去消息缓存在这里 等待发送成功验证
   final Map _mapPendingMsg = {};
 
@@ -54,7 +45,7 @@ class QQManager {
       if (!_connected) {
         if ((receive['syncId'] == '') && (receive['data']['code'] == 0) && (receive['data']['session'] == 'SINGLE_SESSION')) {
           _connected = true;
-          for (var plugin in _pluginList) {
+          for (var plugin in PluginList) {
             plugin.onInit();
           }
           sendFriendMsg(qq: masterQQ, message: '机器人$robotQQ上线成功');
@@ -74,7 +65,7 @@ class QQManager {
         }
         _mapPendingMsg.remove(receive['syncId']);
       } else {
-        for (var plugin in _pluginList) {
+        for (var plugin in PluginList) {
           plugin.onRecvMsg(receive);
         }
       }
