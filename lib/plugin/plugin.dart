@@ -1,3 +1,5 @@
+import 'package:qq_robot_server/model/message.dart';
+
 import 'envy.dart';
 import 'steam.dart';
 import 'switch.dart';
@@ -11,5 +13,5 @@ final List<Plugin> PluginList = [
 class Plugin {
   onInit() {}
 
-  onRecvMsg(Map msg) {}
+  onRecvMsg(Message msg) {}
 }

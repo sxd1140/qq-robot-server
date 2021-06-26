@@ -2,7 +2,6 @@ import 'package:html/parser.dart';
 import 'package:puppeteer/puppeteer.dart';
 import 'package:qq_robot_server/plugin/plugin.dart';
 
-import '/Constant.dart';
 import '/model/message.dart';
 import '/slib.dart';
 import '/util.dart';
@@ -11,16 +10,8 @@ class PluginSteam extends Plugin {
   String KEY_WORD = 'steam';
 
   @override
-  onRecvMsg(Map msg) async {
-    super.onRecvMsg(msg);
-    late final recvMsg;
-    if (msg.isGroupMessage) {
-      recvMsg = RecvGroupMessage.fromJson(msg);
-    } else if (msg.isFriendMessage || msg.isTempMessage) {
-      recvMsg = RecvFriendMessage.fromJson(msg);
-    } else {
-      return;
-    }
+  onRecvMsg(Message recvMsg) async {
+    super.onRecvMsg(recvMsg);
 
     String contents = recvMsg.allText;
     if (contents.length <= 0) return;

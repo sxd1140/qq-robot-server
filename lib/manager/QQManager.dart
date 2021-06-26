@@ -40,7 +40,7 @@ class QQManager {
     }, 30 * 1000);
 
     await for (var msg in receiveStream) {
-      final receive = jsonDecode(msg);
+      final Map receive = jsonDecode(msg);
       print('receive $receive');
       if (!_connected) {
         if ((receive['syncId'] == '') && (receive['data']['code'] == 0) && (receive['data']['session'] == 'SINGLE_SESSION')) {
@@ -65,8 +65,12 @@ class QQManager {
         }
         _mapPendingMsg.remove(receive['syncId']);
       } else {
+        final recvMessage = receive.toRecvMessage();
+        if (recvMessage == null) {
+          continue;
+        }
         for (var plugin in PluginList) {
-          plugin.onRecvMsg(receive);
+          plugin.onRecvMsg(recvMessage);
         }
       }
     }

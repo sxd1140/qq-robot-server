@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'model/message.dart';
+
 String serverDomain = Platform.environment['serverDomain'] ?? 'ws://localhost:8080';
 
 int robotQQ = int.tryParse(Platform.environment["robotQQ"].toString()) ?? 33057788;
@@ -25,6 +27,16 @@ extension MsgObject on Map {
 
   bool get isOtherClientMessage {
     return this['data']['type'] == eRecvMsg.otherClientMessage.command;
+  }
+
+  toRecvMessage() {
+    Message? recvMsg;
+    if (this.isGroupMessage) {
+      recvMsg = RecvGroupMessage.fromJson(this);
+    } else if (this.isFriendMessage || this.isTempMessage) {
+      recvMsg = RecvFriendMessage.fromJson(this);
+    }
+    return recvMsg;
   }
 }
 

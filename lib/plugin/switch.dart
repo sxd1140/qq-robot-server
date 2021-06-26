@@ -1,6 +1,5 @@
 import 'package:qq_robot_server/plugin/plugin.dart';
 
-import '/Constant.dart';
 import '/model/message.dart';
 import '/slib.dart';
 import '/util.dart';
@@ -9,16 +8,8 @@ class PluginSwitch extends Plugin {
   String KEY_WORD = 'switch';
 
   @override
-  onRecvMsg(Map msg) async {
-    super.onRecvMsg(msg);
-    late final recvMsg;
-    if (msg.isGroupMessage) {
-      recvMsg = RecvGroupMessage.fromJson(msg);
-    } else if (msg.isFriendMessage || msg.isTempMessage) {
-      recvMsg = RecvFriendMessage.fromJson(msg);
-    } else {
-      return;
-    }
+  onRecvMsg(Message recvMsg) async {
+    super.onRecvMsg(recvMsg);
 
     String contents = recvMsg.allText;
     if (contents.length <= 0) return;
