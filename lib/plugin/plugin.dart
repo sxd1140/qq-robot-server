@@ -1,10 +1,12 @@
 import 'package:qq_robot_server/model/message.dart';
+import 'package:qq_robot_server/plugin/help.dart';
 
 import 'envy.dart';
 import 'steam.dart';
 import 'switch.dart';
 
 final List<Plugin> PluginList = [
+  PluginHelp(),
   PluginSteam(),
   PluginSwitch(),
   PluginEnvy(),
@@ -13,5 +15,5 @@ final List<Plugin> PluginList = [
 class Plugin {
   onInit() {}
 
-  onRecvMsg(Message msg) {}
+  onRecvMsg(Message recvMsg) {}
 }
