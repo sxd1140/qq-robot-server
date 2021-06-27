@@ -32,7 +32,12 @@ class PluginSwitch extends Plugin {
     final price = game['price'];
     final country = game['country'];
 
-    final text = '\n$name $recommendLabel\n$country $price';
+    final text = [
+      '',
+      '$name $recommendLabel',
+      if (game['chinese_all'] == 1) '全区中文' else if (game['chineseVer'] == 1) '有中文' else null,
+      if (country != null && price != null) '${country ?? ''} ${price ?? ''}',
+    ].join('\n');
     replyMsg(recvMsg, [
       buildImageMsgItem(url: image),
       buildPlainMsgItem(text),
