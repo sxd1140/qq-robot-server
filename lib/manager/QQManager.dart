@@ -40,7 +40,7 @@ class QQManager {
     }, 30 * 1000);
 
     await for (var msg in receiveStream) {
-      final Map receive = jsonDecode(msg);
+      final JSON receive = jsonDecode(msg);
       print('receive $receive');
       if (!_connected) {
         if ((receive['syncId'] == '') && (receive['data']['code'] == 0) && (receive['data']['session'] == 'SINGLE_SESSION')) {

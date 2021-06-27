@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'model/message.dart';
+import 'slib.dart';
 
 String serverDomain = Platform.environment['serverDomain'] ?? 'ws://localhost:8080';
 
@@ -8,7 +9,7 @@ int robotQQ = int.tryParse(Platform.environment["robotQQ"].toString()) ?? 330577
 int masterQQ = int.tryParse(Platform.environment["masterQQ"].toString()) ?? 247209930;
 const installBGroupQQ = 342854392;
 
-extension MsgObject on Map {
+extension MsgObject on JSON {
   bool get isFriendMessage {
     return this['data']['type'] == eRecvMsg.friendMessage.command;
   }

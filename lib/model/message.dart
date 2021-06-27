@@ -1,3 +1,4 @@
+import '../slib.dart';
 import '../util.dart';
 import 'model.dart';
 import 'sender.dart';
@@ -6,7 +7,7 @@ class Message extends ModelFromServer {
   late List messageChain;
   late Sender sender;
 
-  Message.fromJson(Map json) : super.fromJson(json) {
+  Message.fromJson(JSON json) : super.fromJson(json) {
     messageChain = parseMsgChain(data['messageChain']);
   }
 
@@ -19,13 +20,13 @@ class Message extends ModelFromServer {
 }
 
 class RecvGroupMessage extends Message {
-  RecvGroupMessage.fromJson(Map json) : super.fromJson(json) {
+  RecvGroupMessage.fromJson(JSON json) : super.fromJson(json) {
     sender = GroupMsgSender.fromJson(data['sender']);
   }
 }
 
 class RecvFriendMessage extends Message {
-  RecvFriendMessage.fromJson(Map json) : super.fromJson(json) {
+  RecvFriendMessage.fromJson(JSON json) : super.fromJson(json) {
     sender = FriendMsgSender.fromJson(data['sender']);
   }
 }
@@ -37,7 +38,7 @@ class MsgItemSource {
   late int id;
   late int time;
 
-  MsgItemSource.fromJson(Map<String, dynamic> json) {
+  MsgItemSource.fromJson(JSON json) {
     type = json['type'];
     id = json['id'];
     time = json['time'];
@@ -48,7 +49,7 @@ class MsgItemPlain {
   late String type;
   late String text;
 
-  MsgItemPlain.fromJson(Map<String, dynamic> json) {
+  MsgItemPlain.fromJson(JSON json) {
     type = json['type'];
     text = json['text'];
   }
@@ -72,7 +73,7 @@ class MsgItemQuote {
   ///被引用回复的原消息的消息链对象
   late Map origin;
 
-  MsgItemQuote.fromJson(Map<String, dynamic> json) {
+  MsgItemQuote.fromJson(JSON json) {
     type = json['type'];
     id = json['id'];
     groupId = json['groupId'];
@@ -91,7 +92,7 @@ class MsgItemAt {
   ///At时显示的文字，发送消息时无效，自动使用群名片
   late String display;
 
-  MsgItemAt.fromJson(Map<String, dynamic> json) {
+  MsgItemAt.fromJson(JSON json) {
     type = json['type'];
     target = json['target'];
     display = json['display'];

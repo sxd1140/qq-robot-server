@@ -7,6 +7,8 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 
+typedef JSON = Map<String, dynamic>;
+
 final isIOS = Platform.isIOS;
 final isAndroid = Platform.isAndroid;
 final isWindows = Platform.isWindows;

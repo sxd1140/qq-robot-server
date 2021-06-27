@@ -24,8 +24,8 @@ class DataManager {
     LeanAuthHeader = {'X-LC-Id': LeanAppID, 'X-LC-Key': LeanAppKey, 'Content-Type': 'application/json'};
   }
 
-  fetchLeanStorage({required String classes, Map? query}) async {
-    Map<String, dynamic>? params;
+  fetchLeanStorage({required String classes, JSON? query}) async {
+    JSON? params;
     if (query != null) {
       params = {'where': jsonEncode(query)};
     }
@@ -40,7 +40,7 @@ class DataManager {
 
   ///累加
   void incrementLeanStorage({required String classes, required String objectID, int amount = 1}) async {
-    final Map<String, dynamic> body = {
+    final JSON body = {
       'count': {'__op': 'Increment', 'amount': amount}
     };
     final result = await put('$LeanRestAPIDomain/1.1/classes/$classes/$objectID', body: body, headers: LeanAuthHeader);
