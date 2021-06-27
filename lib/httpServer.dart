@@ -11,6 +11,10 @@ init() async {
 // https://cloud.google.com/run/docs/reference/container-contract#port
   final port = int.parse(Platform.environment['PORT'] ?? '11400');
 
+  // Serve files from the file system.
+  final public = Directory('public');
+  if (!public.existsSync()) public.createSync();
+  final _staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
 // See https://pub.dev/documentation/shelf/latest/shelf/Cascade-class.html
   final cascade = Cascade()
 // First, serve files from the 'public' directory
@@ -33,9 +37,6 @@ init() async {
 
   print('Serving at http://${server.address.host}:${server.port}');
 }
-
-// Serve files from the file system.
-final _staticHandler = shelf_static.createStaticHandler('public', defaultDocument: 'index.html');
 
 // Router instance to handler requests.
 final _router = shelf_router.Router()
