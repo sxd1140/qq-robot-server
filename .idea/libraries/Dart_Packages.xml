@@ -79,6 +79,13 @@
             </list>
           </value>
         </entry>
+        <entry key="cron">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/cron-0.3.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="crypto">
           <value>
             <list>
@@ -415,6 +422,7 @@
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/collection-1.15.0/lib" />
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/convert-3.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/coverage-1.0.3/lib" />
+      <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/cron-0.3.0/lib" />
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/crypto-3.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/csslib-0.17.0/lib" />
       <root url="file://$PROJECT_DIR$/../.pub-cache/hosted/pub.flutter-io.cn/dio-4.0.0/lib" />

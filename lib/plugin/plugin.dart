@@ -1,7 +1,8 @@
 import 'package:qq_robot_server/model/message.dart';
-import 'package:qq_robot_server/plugin/help.dart';
 
 import 'envy.dart';
+import 'help.dart';
+import 'news.dart';
 import 'steam.dart';
 import 'switch.dart';
 
@@ -10,6 +11,7 @@ final List<Plugin> PluginList = [
   PluginSteam(),
   PluginSwitch(),
   PluginEnvy(),
+  PluginNews(),
 ];
 
 class Plugin {
